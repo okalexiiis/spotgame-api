@@ -1,0 +1,45 @@
+import { z } from 'zod';
+export declare const TrailerSchema: z.ZodObject<{
+    idTrailer: z.ZodString;
+    idJuego: z.ZodString;
+    titulo: z.ZodString;
+    tipo: z.ZodNullable<z.ZodString>;
+    urlVideo: z.ZodNullable<z.ZodString>;
+    urlPoster: z.ZodNullable<z.ZodString>;
+    orden: z.ZodDefault<z.ZodNumber>;
+    subidoPor: z.ZodNullable<z.ZodString>;
+    estadoRevision: z.ZodDefault<z.ZodString>;
+    motivoRechazo: z.ZodNullable<z.ZodString>;
+    estadoArchivo: z.ZodDefault<z.ZodString>;
+    storageKey: z.ZodNullable<z.ZodString>;
+    duracionSegundos: z.ZodNullable<z.ZodNumber>;
+    vistas: z.ZodDefault<z.ZodNumber>;
+}, z.core.$strip>;
+export declare const CreateTrailerSchema: z.ZodObject<{
+    storageKey: z.ZodNullable<z.ZodString>;
+    titulo: z.ZodString;
+    idJuego: z.ZodString;
+    orden: z.ZodDefault<z.ZodNumber>;
+    tipo: z.ZodNullable<z.ZodString>;
+    urlVideo: z.ZodNullable<z.ZodString>;
+    urlPoster: z.ZodNullable<z.ZodString>;
+    subidoPor: z.ZodNullable<z.ZodString>;
+    estadoRevision: z.ZodDefault<z.ZodString>;
+    motivoRechazo: z.ZodNullable<z.ZodString>;
+    estadoArchivo: z.ZodDefault<z.ZodString>;
+    duracionSegundos: z.ZodNullable<z.ZodNumber>;
+}, z.core.$strip>;
+export declare const UpdateTrailerSchema: z.ZodObject<{
+    storageKey: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    titulo: z.ZodOptional<z.ZodString>;
+    idJuego: z.ZodOptional<z.ZodString>;
+    orden: z.ZodOptional<z.ZodDefault<z.ZodNumber>>;
+    tipo: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    urlVideo: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    urlPoster: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    subidoPor: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    estadoRevision: z.ZodOptional<z.ZodDefault<z.ZodString>>;
+    motivoRechazo: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    estadoArchivo: z.ZodOptional<z.ZodDefault<z.ZodString>>;
+    duracionSegundos: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
+}, z.core.$strip>;
