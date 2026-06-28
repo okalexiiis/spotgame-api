@@ -5,10 +5,10 @@ export const NotificacionSchema = z.object({
   idNotificacion: z.string().uuid(),
   titulo: z.string(),
   mensaje: z.string(),
-  tipo: z.string().nullable(),
+  tipo: z.enum(['lanzamiento', 'trailer', 'alerta', 'mi_lista', 'recompensa']).nullable(),
   leida: z.boolean(),
   fechaCreacion: z.string(),
-  entidad: z.string().nullable(),
+  entidad: z.enum(['juego', 'trailer', 'lanzamiento', 'noticia']).nullable(),
   entidadId: z.string().uuid().nullable(),
 });
 

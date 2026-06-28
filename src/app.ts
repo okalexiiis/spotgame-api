@@ -3,9 +3,12 @@ import cors from 'cors';
 import helmet from 'helmet';
 import morgan from 'morgan';
 import swaggerUi from 'swagger-ui-express';
+import './schemas';
 import routes from './routes';
 import { getOpenApiDocumentation } from './lib/openapi';
 import { errorHandler } from './middlewares/error.middleware';
+import { apiLimiter } from './middlewares/rateLimit';
+import prisma from './lib/prisma';
 
 const app: Express = express();
 
@@ -18,10 +21,15 @@ app.use(express.json());
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(getOpenApiDocumentation()));
 
 // API Routes
-app.use('/api/v1', routes);
+app.use('/api/v1', apiLimiter, routes);
 
-app.get('/health', (req, res) => {
-  res.json({ status: 'ok', timestamp: new Date().toISOString() });
+app.get('/health', async (req, res) => {
+  try {
+    await prisma.$queryRaw`SELECT 1`;
+    res.json({ status: 'ok', timestamp: new Date().toISOString() });
+  } catch {
+    res.status(503).json({ status: 'error', message: 'Database unavailable' });
+  }
 });
 
 // Global Error Handler

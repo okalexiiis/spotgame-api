@@ -10,16 +10,28 @@ export const TrailerSchema = z.object({
   urlPoster: z.string().nullable(),
   orden: z.number().int().default(0),
   subidoPor: z.string().uuid().nullable(),
-  estadoRevision: z.string().default('pendiente'),
+  estadoRevision: z.enum(['pendiente', 'aprobado', 'rechazado']).default('pendiente'),
   motivoRechazo: z.string().nullable(),
-  estadoArchivo: z.string().default('subiendo'),
+  estadoArchivo: z.enum(['subiendo', 'disponible', 'error']).default('subiendo'),
   storageKey: z.string().nullable(),
   duracionSegundos: z.number().int().nullable(),
   vistas: z.number().int().default(0),
 });
 
 export const CreateTrailerSchema = TrailerSchema.omit({ idTrailer: true, vistas: true });
-export const UpdateTrailerSchema = CreateTrailerSchema.partial();
+
+export const UpdateTrailerSchema = z.object({
+  titulo: z.string().min(1).max(200).optional(),
+  urlPoster: z.string().nullable().optional(),
+  tipo: z.string().nullable().optional(),
+  duracionSegundos: z.number().int().nullable().optional(),
+});
+
+export const ModerateTrailerSchema = z.object({
+  estadoRevision: z.enum(['pendiente', 'aprobado', 'rechazado']),
+  motivoRechazo: z.string().nullable().optional(),
+  vistas: z.number().int().min(0).optional(),
+});
 
 const baseTrailerPath = '/trailers';
 
@@ -104,5 +116,25 @@ registry.registerPath({
   parameters: [{ name: 'id', in: 'path', required: true, schema: { type: 'string', format: 'uuid' } }],
   responses: {
     204: { description: 'Trailer deleted' },
+  },
+});
+
+registry.registerPath({
+  tags: ['Trailers'],
+  method: 'patch',
+  path: `${baseTrailerPath}/{id}/moderate`,
+  summary: 'Moderate a trailer (admin only)',
+  security: [{ bearerAuth: [] }],
+  parameters: [{ name: 'id', in: 'path', required: true, schema: { type: 'string', format: 'uuid' } }],
+  request: {
+    body: {
+      content: { 'application/json': { schema: ModerateTrailerSchema } },
+    },
+  },
+  responses: {
+    200: {
+      description: 'Trailer moderated',
+      content: { 'application/json': { schema: TrailerSchema } },
+    },
   },
 });

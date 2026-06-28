@@ -14,7 +14,7 @@ export const authenticate = async (req: Request, res: Response, next: NextFuncti
   try {
     const sesion = await prisma.sesion.findUnique({
       where: { token },
-      include: { usuario: true },
+      include: { usuario: { include: { roles: { include: { rol: true } } } } },
     });
 
     if (!sesion || !sesion.activa || (sesion.fechaFin && sesion.fechaFin < new Date())) {
@@ -22,7 +22,11 @@ export const authenticate = async (req: Request, res: Response, next: NextFuncti
       return;
     }
 
-    req.user = sesion.usuario;
+    const { contrasenaHash: _contrasenaHash, ...safeUser } = sesion.usuario;
+    req.user = {
+      ...safeUser,
+      roles: sesion.usuario.roles.map((ur) => ur.rol.nombre),
+    };
     next();
   } catch (error) {
     console.error('Auth middleware error:', error);

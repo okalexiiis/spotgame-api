@@ -1,15 +1,12 @@
 import { Request, Response } from 'express';
 import prisma from '../lib/prisma';
+import { paginate } from '../lib/pagination';
 
 export const listMine = async (req: Request, res: Response) => {
-  try {
-    const logs = await prisma.logActividad.findMany({
-      where: { idUsuario: req.user!.idUsuario },
-      orderBy: { fecha: 'desc' },
-      take: 50,
-    });
-    res.json(logs);
-  } catch (error) {
-    res.status(500).json({ status: 'error', message: 'Internal server error' });
-  }
+  const { page, limit } = req.query as any;
+  res.json(await paginate(prisma.logActividad, {
+    page, limit,
+    where: { idUsuario: req.user!.idUsuario },
+    orderBy: { fecha: 'desc' },
+  }));
 };

@@ -7,8 +7,8 @@ export const ConfiguracionUsuarioSchema = z.object({
   notificacionesPush: z.boolean().default(true),
   privacidadPerfil: z.string().max(20).nullable().openapi({ example: 'public' }),
   controlParental: z.boolean().default(false),
-  calidadVideo: z.string().max(20).default('auto').openapi({ example: '1080p' }),
-  tamanoTexto: z.string().max(20).default('normal').openapi({ example: 'normal' }),
+  calidadVideo: z.enum(['auto', '1080p', '720p']).default('auto').openapi({ example: '1080p' }),
+  tamanoTexto: z.enum(['normal', 'grande']).default('normal').openapi({ example: 'normal' }),
   idiomaId: z.string().uuid().nullable(),
 });
 

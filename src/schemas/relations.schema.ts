@@ -105,3 +105,94 @@ registry.registerPath({
   request: { body: { content: { 'application/json': { schema: LinkRolSchema } } } },
   responses: { 201: { description: 'Role assigned' } },
 });
+
+// ============================================================================
+// Missing OpenAPI paths (Phase 3)
+// ============================================================================
+
+registry.registerPath({
+  tags: ['Proximos Lanzamientos'],
+  method: 'get',
+  path: `${launchPath}/{id}`,
+  summary: 'Get launch entry by ID',
+  parameters: [{ name: 'id', in: 'path', required: true, schema: { type: 'string', format: 'uuid' } }],
+  responses: { 200: { description: 'Launch entry', content: { 'application/json': { schema: ProximoLanzamientoSchema } } }, 404: { description: 'Not found' } },
+});
+
+registry.registerPath({
+  tags: ['Proximos Lanzamientos'],
+  method: 'put',
+  path: `${launchPath}/{id}`,
+  summary: 'Update a launch entry',
+  security: [{ bearerAuth: [] }],
+  parameters: [{ name: 'id', in: 'path', required: true, schema: { type: 'string', format: 'uuid' } }],
+  request: { body: { content: { 'application/json': { schema: UpdateLanzamientoSchema } } } },
+  responses: { 200: { description: 'Launch entry updated' } },
+});
+
+registry.registerPath({
+  tags: ['Proximos Lanzamientos'],
+  method: 'delete',
+  path: `${launchPath}/{id}`,
+  summary: 'Delete a launch entry',
+  security: [{ bearerAuth: [] }],
+  parameters: [{ name: 'id', in: 'path', required: true, schema: { type: 'string', format: 'uuid' } }],
+  responses: { 204: { description: 'Launch entry deleted' } },
+});
+
+registry.registerPath({
+  tags: ['Juegos'],
+  method: 'delete',
+  path: '/juegos/{id}/generos',
+  summary: 'Remove a genre link from a game',
+  security: [{ bearerAuth: [] }],
+  parameters: [{ name: 'id', in: 'path', required: true, schema: { type: 'string', format: 'uuid' } }],
+  request: { body: { content: { 'application/json': { schema: LinkGeneroSchema } } } },
+  responses: { 204: { description: 'Genre link removed' } },
+});
+
+registry.registerPath({
+  tags: ['Juegos'],
+  method: 'delete',
+  path: '/juegos/{id}/plataformas',
+  summary: 'Remove a platform link from a game',
+  security: [{ bearerAuth: [] }],
+  parameters: [{ name: 'id', in: 'path', required: true, schema: { type: 'string', format: 'uuid' } }],
+  request: { body: { content: { 'application/json': { schema: LinkPlataformaSchema } } } },
+  responses: { 204: { description: 'Platform link removed' } },
+});
+
+registry.registerPath({
+  tags: ['Trailers'],
+  method: 'delete',
+  path: '/trailers/{id}/categorias',
+  summary: 'Remove a category link from a trailer',
+  security: [{ bearerAuth: [] }],
+  parameters: [{ name: 'id', in: 'path', required: true, schema: { type: 'string', format: 'uuid' } }],
+  request: { body: { content: { 'application/json': { schema: LinkCategoriaSchema } } } },
+  responses: { 204: { description: 'Category link removed' } },
+});
+
+registry.registerPath({
+  tags: ['Noticias'],
+  method: 'delete',
+  path: '/noticias/{id}/imagenes/{idImagen}',
+  summary: 'Remove an image from a news article gallery',
+  security: [{ bearerAuth: [] }],
+  parameters: [
+    { name: 'id', in: 'path', required: true, schema: { type: 'string', format: 'uuid' } },
+    { name: 'idImagen', in: 'path', required: true, schema: { type: 'string', format: 'uuid' } },
+  ],
+  responses: { 204: { description: 'Image removed' } },
+});
+
+registry.registerPath({
+  tags: ['Usuarios'],
+  method: 'delete',
+  path: '/usuarios/{id}/roles',
+  summary: 'Remove a role from a user',
+  security: [{ bearerAuth: [] }],
+  parameters: [{ name: 'id', in: 'path', required: true, schema: { type: 'string', format: 'uuid' } }],
+  request: { body: { content: { 'application/json': { schema: LinkRolSchema } } } },
+  responses: { 204: { description: 'Role removed' } },
+});

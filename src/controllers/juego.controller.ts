@@ -1,40 +1,34 @@
-import { Request, Response, NextFunction } from 'express';
+import { Request, Response } from 'express';
 import prisma from '../lib/prisma';
 import { Prisma } from '@prisma/client';
 
-export const list = async (req: Request, res: Response, next: NextFunction) => {
-  try {
-    const { page, limit, search, generoId, plataformaId } = req.query as any;
-    console.log('Juego list query:', { page, limit, search, generoId, plataformaId });
-    const skip = (page - 1) * limit;
+export const list = async (req: Request, res: Response) => {
+  const { page, limit, search, generoId, plataformaId } = req.query as any;
+  const skip = (page - 1) * limit;
 
-    const where: Prisma.JuegoWhereInput = {
-      AND: [
-        search ? { titulo: { contains: search, mode: 'insensitive' } } : {},
-        generoId ? { generos: { some: { idGenero: generoId } } } : {},
-        plataformaId ? { plataformas: { some: { idPlataforma: plataformaId } } } : {},
-      ],
-    };
+  const where: Prisma.JuegoWhereInput = {
+    AND: [
+      search ? { titulo: { contains: search, mode: 'insensitive' } } : {},
+      generoId ? { generos: { some: { idGenero: generoId } } } : {},
+      plataformaId ? { plataformas: { some: { idPlataforma: plataformaId } } } : {},
+    ],
+  };
 
-    const [total, data] = await prisma.$transaction([
-      prisma.juego.count({ where }),
-      prisma.juego.findMany({
-        where,
-        skip,
-        take: limit,
-        orderBy: { createdAt: 'desc' },
-        include: { generos: { include: { genero: true } }, plataformas: { include: { plataforma: true } } },
-      }),
-    ]);
+  const [total, data] = await prisma.$transaction([
+    prisma.juego.count({ where }),
+    prisma.juego.findMany({
+      where,
+      skip,
+      take: limit,
+      orderBy: { createdAt: 'desc' },
+      include: { generos: { include: { genero: true } }, plataformas: { include: { plataforma: true } } },
+    }),
+  ]);
 
-    res.json({
-      data,
-      meta: { total, page, limit, totalPages: Math.ceil(total / limit) },
-    });
-  } catch (error) {
-    console.error('Controller Error (list):', error);
-    next(error);
-  }
+  res.json({
+    data,
+    meta: { total, page, limit, totalPages: Math.ceil(total / limit) },
+  });
 };
 
 export const getById = async (req: Request, res: Response) => {
@@ -44,17 +38,15 @@ export const getById = async (req: Request, res: Response) => {
 };
 
 export const create = async (req: Request, res: Response) => {
-  const data = req.body;
-  if (data.fechaLanzamiento) data.fechaLanzamiento = new Date(data.fechaLanzamiento);
-  res.status(201).json(await prisma.juego.create({ data }));
+  const payload = { ...req.body, fechaLanzamiento: req.body.fechaLanzamiento ? new Date(req.body.fechaLanzamiento) : undefined };
+  res.status(201).json(await prisma.juego.create({ data: payload }));
 };
 
 export const update = async (req: Request, res: Response) => {
-  const data = req.body;
-  if (data.fechaLanzamiento) data.fechaLanzamiento = new Date(data.fechaLanzamiento);
+  const payload = { ...req.body, fechaLanzamiento: req.body.fechaLanzamiento ? new Date(req.body.fechaLanzamiento) : undefined };
   res.json(await prisma.juego.update({
     where: { idJuego: req.params.id as string },
-    data,
+    data: payload,
   }));
 };
 

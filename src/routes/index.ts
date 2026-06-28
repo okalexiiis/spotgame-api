@@ -1,4 +1,5 @@
 import { Router } from 'express';
+import { audit } from '../middlewares/audit';
 import authRoutes from './auth.routes';
 import uploadRoutes from './upload.routes';
 import juegoRoutes from './juego.routes';
@@ -14,6 +15,8 @@ import lanzamientoRoutes from './lanzamiento.routes';
 import usuarioRoutes from './usuario.routes';
 
 const router: Router = Router();
+
+router.use(audit);
 
 router.use('/auth', authRoutes);
 router.use('/upload', uploadRoutes);

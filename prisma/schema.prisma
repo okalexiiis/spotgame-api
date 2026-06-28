@@ -188,6 +188,7 @@ model LogActividad {
   usuario Usuario? @relation(fields: [idUsuario], references: [idUsuario], onDelete: SetNull)
 
   @@map("logs_actividad")
+  @@index([idUsuario, fecha])
 }
 
 // =============================================================================

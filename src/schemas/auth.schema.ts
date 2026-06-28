@@ -1,8 +1,5 @@
-import { extendZodWithOpenApi } from '@asteasolutions/zod-to-openapi';
 import { z } from 'zod';
 import { registry } from '../lib/openapi';
-
-extendZodWithOpenApi(z);
 
 export const RegisterSchema = z.object({
   nombre: z.string().min(1).max(100).openapi({ example: 'John Doe' }),
@@ -78,5 +75,17 @@ registry.registerPath({
       },
     },
     401: { description: 'Invalid credentials' },
+  },
+});
+
+registry.registerPath({
+  tags: ['Auth'],
+  method: 'post',
+  path: '/auth/logout',
+  summary: 'Logout and invalidate the current session token',
+  security: [{ bearerAuth: [] }],
+  responses: {
+    200: { description: 'Logged out successfully' },
+    400: { description: 'No token provided' },
   },
 });

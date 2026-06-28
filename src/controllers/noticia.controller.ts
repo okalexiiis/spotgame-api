@@ -42,16 +42,17 @@ export const getById = async (req: Request, res: Response) => {
 };
 
 export const create = async (req: Request, res: Response) => {
-  const data = req.body;
-  if (data.fechaPublicacion) data.fechaPublicacion = new Date(data.fechaPublicacion);
-  if (!data.autorId && req.user) data.autorId = req.user.idUsuario;
-  res.status(201).json(await prisma.noticia.create({ data }));
+  const payload = {
+    ...req.body,
+    fechaPublicacion: req.body.fechaPublicacion ? new Date(req.body.fechaPublicacion) : undefined,
+    autorId: req.body.autorId || req.user!.idUsuario,
+  };
+  res.status(201).json(await prisma.noticia.create({ data: payload }));
 };
 
 export const update = async (req: Request, res: Response) => {
-  const data = req.body;
-  if (data.fechaPublicacion) data.fechaPublicacion = new Date(data.fechaPublicacion);
-  res.json(await prisma.noticia.update({ where: { idNoticia: req.params.id as string }, data }));
+  const payload = { ...req.body, fechaPublicacion: req.body.fechaPublicacion ? new Date(req.body.fechaPublicacion) : undefined };
+  res.json(await prisma.noticia.update({ where: { idNoticia: req.params.id as string }, data: payload }));
 };
 
 export const remove = async (req: Request, res: Response) => {

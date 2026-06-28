@@ -1,8 +1,12 @@
 import {
   OpenAPIRegistry,
   OpenApiGeneratorV3,
+  extendZodWithOpenApi,
 } from '@asteasolutions/zod-to-openapi';
 import { OpenAPIObject } from 'openapi3-ts/oas30';
+import { z } from 'zod';
+
+extendZodWithOpenApi(z);
 
 export const registry = new OpenAPIRegistry();
 

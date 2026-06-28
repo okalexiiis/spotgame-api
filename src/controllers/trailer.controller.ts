@@ -1,10 +1,16 @@
 import { Request, Response } from 'express';
 import prisma from '../lib/prisma';
+import { paginate } from '../lib/pagination';
+import { ADMIN_ROLES } from '../middlewares/authorize';
 
 export const list = async (req: Request, res: Response) => {
-  res.json(await prisma.trailer.findMany({
-    orderBy: { createdAt: 'desc' },
+  const { page, limit } = req.query as any;
+  const isAdmin = req.user?.roles.some((r) => ADMIN_ROLES.includes(r));
+  res.json(await paginate(prisma.trailer, {
+    page, limit,
+    where: isAdmin ? {} : { estadoRevision: 'aprobado' },
     include: { juego: { select: { titulo: true } } },
+    orderBy: { createdAt: 'desc' },
   }));
 };
 
@@ -18,12 +24,19 @@ export const getById = async (req: Request, res: Response) => {
 };
 
 export const create = async (req: Request, res: Response) => {
-  const data = req.body;
-  if (!data.subidoPor && req.user) data.subidoPor = req.user.idUsuario;
-  res.status(201).json(await prisma.trailer.create({ data }));
+  res.status(201).json(await prisma.trailer.create({
+    data: { ...req.body, subidoPor: req.user!.idUsuario },
+  }));
 };
 
 export const update = async (req: Request, res: Response) => {
+  res.json(await prisma.trailer.update({
+    where: { idTrailer: req.params.id as string },
+    data: req.body,
+  }));
+};
+
+export const moderate = async (req: Request, res: Response) => {
   res.json(await prisma.trailer.update({
     where: { idTrailer: req.params.id as string },
     data: req.body,

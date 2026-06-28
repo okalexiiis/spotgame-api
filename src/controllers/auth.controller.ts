@@ -16,7 +16,9 @@ export const register = async (req: Request, res: Response) => {
   });
 
   const token = generateToken();
-  await prisma.sesion.create({ data: { idUsuario: usuario.idUsuario, token } });
+  await prisma.sesion.create({
+    data: { idUsuario: usuario.idUsuario, token, fechaFin: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000) },
+  });
 
   res.status(201).json({ token, usuario: { idUsuario: usuario.idUsuario, nombre: usuario.nombre, username: usuario.username, correo: usuario.correo } });
 };
@@ -30,7 +32,10 @@ export const login = async (req: Request, res: Response) => {
   }
 
   const token = generateToken();
-  await prisma.sesion.create({ data: { idUsuario: usuario.idUsuario, token } });
+  await prisma.sesion.create({
+    data: { idUsuario: usuario.idUsuario, token, fechaFin: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000) },
+  });
+  await prisma.usuario.update({ where: { idUsuario: usuario.idUsuario }, data: { ultimaSesion: new Date() } });
 
   res.status(200).json({ token, usuario: { idUsuario: usuario.idUsuario, nombre: usuario.nombre, username: usuario.username, correo: usuario.correo } });
 };

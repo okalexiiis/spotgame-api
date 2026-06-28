@@ -11,7 +11,7 @@ export const QrApproveRequestSchema = z.object({
 });
 
 export const QrStatusResponseSchema = z.object({
-  estado: z.enum(['pendiente', 'aprobado', 'expirado']),
+  estado: z.enum(['pendiente', 'aprobado', 'expirado', 'consumido']),
   token: z.string().nullable().openapi({ description: 'Provided only if status is approved' }),
 });
 

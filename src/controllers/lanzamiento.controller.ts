@@ -1,8 +1,11 @@
 import { Request, Response } from 'express';
 import prisma from '../lib/prisma';
+import { paginate } from '../lib/pagination';
 
 export const list = async (req: Request, res: Response) => {
-  res.json(await prisma.proximoLanzamiento.findMany({
+  const { page, limit } = req.query as any;
+  res.json(await paginate(prisma.proximoLanzamiento, {
+    page, limit,
     include: { juego: { select: { titulo: true, slug: true } } },
     orderBy: { fechaLanzamiento: 'asc' },
   }));
@@ -18,15 +21,13 @@ export const getById = async (req: Request, res: Response) => {
 };
 
 export const create = async (req: Request, res: Response) => {
-  const data = req.body;
-  if (data.fechaLanzamiento) data.fechaLanzamiento = new Date(data.fechaLanzamiento);
-  res.status(201).json(await prisma.proximoLanzamiento.create({ data }));
+  const payload = { ...req.body, fechaLanzamiento: req.body.fechaLanzamiento ? new Date(req.body.fechaLanzamiento) : undefined };
+  res.status(201).json(await prisma.proximoLanzamiento.create({ data: payload }));
 };
 
 export const update = async (req: Request, res: Response) => {
-  const data = req.body;
-  if (data.fechaLanzamiento) data.fechaLanzamiento = new Date(data.fechaLanzamiento);
-  res.json(await prisma.proximoLanzamiento.update({ where: { idLanzamiento: req.params.id as string }, data }));
+  const payload = { ...req.body, fechaLanzamiento: req.body.fechaLanzamiento ? new Date(req.body.fechaLanzamiento) : undefined };
+  res.json(await prisma.proximoLanzamiento.update({ where: { idLanzamiento: req.params.id as string }, data: payload }));
 };
 
 export const remove = async (req: Request, res: Response) => {

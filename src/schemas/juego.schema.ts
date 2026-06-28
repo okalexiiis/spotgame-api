@@ -11,7 +11,7 @@ export const JuegoSchema = z.object({
   editor: z.string().nullable(),
   imagenPortada: z.string().nullable(),
   bannerUrl: z.string().nullable(),
-  estado: z.string().nullable(),
+  estado: z.enum(['anunciado', 'publicado']).nullable(),
   destacado: z.boolean(),
 });
 
