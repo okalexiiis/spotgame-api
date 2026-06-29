@@ -499,7 +499,7 @@ async function main() {
       fechaLanzamiento: new Date('2026-03-15'),
       desarrollador: '343 Industries',
       editor: 'Xbox Game Studios',
-      imagenPortada: `${R2_BASE}/posters/halo-poster.jpg`,
+      imagenPortada: `${R2_BASE}/posters/haloce-poster.jpg`,
       bannerUrl: null,
       estado: 'anunciado',
       destacado: true,
@@ -604,7 +604,7 @@ async function main() {
     { idJuego: halo.idJuego, titulo: 'Halo: Campaign Evolved — Tráiler Oficial', tipo: 'Cinematográfico', catId: catCinematic.idCategoria, video: `${R2_BASE}/videos/halo-trailer.mp4`, poster: `${R2_BASE}/posters/halo-poster.jpg`, durSec: 140, vistas: 12000000 },
     { idJuego: supremeExperiment.idJuego, titulo: 'Supreme Experiment — Tráiler Oficial', tipo: 'Historia', catId: catStory.idCategoria, video: `${R2_BASE}/videos/supremeexperiment-trailer.mp4`, poster: `${R2_BASE}/posters/supremeexperiment-poster.jpg`, durSec: 100, vistas: 2000000 },
     { idJuego: gtaVI.idJuego, titulo: 'GTA VI — Bienvenidos a Leonida', tipo: 'Cinematográfico', catId: catCinematic.idCategoria, video: `${R2_BASE}/videos/gta6-trailer.mp4`, poster: `${R2_BASE}/posters/gta6-poster.jpg`, durSec: 91, vistas: 200000000 },
-    { idJuego: tmnt.idJuego, titulo: 'TMNT: The Last Ronin — Reveal Trailer', tipo: 'Cinematográfico', catId: catCinematic.idCategoria, video: `${R2_BASE}/videos/tmntlastronin-trailer.mp4`, poster: `${R2_BASE}/posters/tmntlastronin-poster.jpg`, durSec: 130, vistas: 10000000 },
+    { idJuego: tmnt.idJuego, titulo: 'TMNT: The Last Ronin — Reveal Trailer', tipo: 'Cinematográfico', catId: catCinematic.idCategoria, video: `${R2_BASE}/videos/tmnt-lastronin-trailer.mp4`, poster: `${R2_BASE}/posters/tmntlastronin-poster.jpg`, durSec: 130, vistas: 10000000 },
     { idJuego: eclipsium.idJuego, titulo: 'Eclipsium — Tráiler de Anuncio', tipo: 'Historia', catId: catStory.idCategoria, video: `${R2_BASE}/videos/eclipsium-trailer.mp4`, poster: `${R2_BASE}/posters/eclipsium-poster.jpg`, durSec: 115, vistas: 1500000 },
   ];
 
