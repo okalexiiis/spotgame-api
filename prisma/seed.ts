@@ -222,7 +222,7 @@ async function main() {
 
   const adminUser = await prisma.usuario.upsert({
     where: { username: 'admin' },
-    update: {},
+    update: { contrasenaHash: hashedAdmin },
     create: {
       nombre: 'Carlos Admin',
       username: 'admin',
@@ -236,7 +236,7 @@ async function main() {
 
   const gamer01 = await prisma.usuario.upsert({
     where: { username: 'gamer01' },
-    update: {},
+    update: { contrasenaHash: hashedUser },
     create: {
       nombre: 'Alex Gamer',
       username: 'gamer01',
@@ -250,7 +250,7 @@ async function main() {
 
   const nightowl = await prisma.usuario.upsert({
     where: { username: 'nightowl' },
-    update: {},
+    update: { contrasenaHash: hashedUser },
     create: {
       nombre: 'Sofía Luna',
       username: 'nightowl',
@@ -264,7 +264,7 @@ async function main() {
 
   const shooterPro = await prisma.usuario.upsert({
     where: { username: 'shooterpro' },
-    update: {},
+    update: { contrasenaHash: hashedUser },
     create: {
       nombre: 'Diego Reyes',
       username: 'shooterpro',
@@ -278,7 +278,7 @@ async function main() {
 
   const horrorFan = await prisma.usuario.upsert({
     where: { username: 'horrorfan' },
-    update: {},
+    update: { contrasenaHash: hashedUser },
     create: {
       nombre: 'Lucía Marín',
       username: 'horrorfan',
@@ -292,7 +292,7 @@ async function main() {
 
   const rpgMaster = await prisma.usuario.upsert({
     where: { username: 'rpgmaster' },
-    update: {},
+    update: { contrasenaHash: hashedUser },
     create: {
       nombre: 'Kenji Tanaka',
       username: 'rpgmaster',
@@ -594,6 +594,8 @@ async function main() {
   // 8. TRAILERS (1 per game, 10 trailers — R2 video URLs)
   // =========================================================================
   console.log('  → Trailers...');
+
+  await prisma.trailer.deleteMany({});
 
   const trailerDefs: { idJuego: string; titulo: string; tipo: string; catId: string; video: string; poster: string; durSec: number; vistas: number }[] = [
     { idJuego: eldenRing.idJuego, titulo: 'Elden Ring — Tráiler Oficial de Lanzamiento', tipo: 'Cinematográfico', catId: catLaunch.idCategoria, video: `${R2_BASE}/videos/eldenring-trailer.mp4`, poster: `${R2_BASE}/posters/eldenring-poster.jpg`, durSec: 185, vistas: 48000000 },
