@@ -25,7 +25,9 @@ export const register = async (req: Request, res: Response) => {
 
 export const login = async (req: Request, res: Response) => {
   const { username, contrasena } = req.body;
-  const usuario = await prisma.usuario.findUnique({ where: { username } });
+  const usuario = await prisma.usuario.findFirst({
+    where: { OR: [{ username }, { correo: username }] },
+  });
 
   if (!usuario || !(await comparePassword(contrasena, usuario.contrasenaHash))) {
     return res.status(401).json({ status: 'error', message: 'Invalid credentials' });
